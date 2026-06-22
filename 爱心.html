@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💗 粉色爱心动画</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a0011 0%, #3d001f 40%, #2d0015 70%, #1a0011 100%);
+    overflow: hidden;
+  }
+
+  /* 爱心容器 */
+  .heart {
+    position: absolute;
+    will-change: transform, opacity;
+    pointer-events: none;
+    animation: floatUp linear forwards;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(0)    translateX(0)  scale(0.4); opacity: 0;   }
+    10%  { transform: translateY(-10px) translateX(0)  scale(0.7); opacity: 0.9; }
+    30%  { opacity: 1; }
+    60%  { opacity: 0.8; }
+    100% { transform: translateY(-110vh) translateX(var(--drift)) scale(1.4); opacity: 0; }
+  }
+
+  /* 音乐播放器 - 固定在底部中间 */
+  .music-player {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(20, 0, 15, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 8px 20px;
+    box-shadow: 0 0 40px rgba(255, 105, 180, 0.35);
+    border: 1px solid rgba(255, 150, 200, 0.2);
+    opacity: 0.8;
+    transition: opacity 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .music-player:hover {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.03);
+  }
+  .music-player audio {
+    height: 40px;
+    width: 300px;
+    outline: none;
+  }
+  .music-player audio::-webkit-media-controls-panel {
+    background: rgba(255, 200, 220, 0.15);
+  }
+  .music-player .np-label {
+    color: #ff99cc;
+    font-size: 13px;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 本地音频播放器 - 齐晨《咱们结婚吧》 -->
+  <div class="music-player">
+    <span class="np-label">💗 咱们结婚吧</span>
+    <audio id="bgm" src="zamenjiehunba.mp3" loop controls autoplay></audio>
+  </div>
+
+  <script>
+    // === 爱心生成器 ===
+    const hearts = ['💗', '💖', '💕', '💘', '💝', '❤️', '🩷', '🌸', '✨'];
+    const body = document.body;
+
+    function createHeart() {
+      const el = document.createElement('div');
+      el.className = 'heart';
+
+      // 随机样式 —— 爱心放大3~4倍，速度减半
+      const size = 60 + Math.random() * 140;        // 60~200px (原来是18~48, 放大3~4倍)
+      const left = Math.random() * 100;              // 0~100%
+      const duration = 8 + Math.random() * 10;       // 8~18秒 (原来是4~9, 速度减半)
+      const delay = Math.random() * 3;               // 0~3秒偏移
+      const drift = (Math.random() - 0.5) * 300;     // 横向飘移 -150~150px
+      const emoji = hearts[Math.floor(Math.random() * hearts.length)];
+
+      el.textContent = emoji;
+      el.style.left = left + '%';
+      el.style.bottom = '-5%';
+      el.style.fontSize = size + 'px';
+      el.style.animationDuration = duration + 's';
+      el.style.animationDelay = delay + 's';
+      el.style.setProperty('--drift', drift + 'px');
+
+      // 随机浅粉色 / 粉紫色调
+      const hue = 320 + Math.random() * 30;         // 320~350°
+      const sat = 80 + Math.random() * 20;          // 80~100%
+      const lit = 65 + Math.random() * 25;          // 65~90%
+      el.style.filter = `hue-rotate(${hue - 330}deg) drop-shadow(0 0 12px hsla(${hue}, ${sat}%, ${lit}%, 0.6))`;
+      el.style.color = `hsl(${hue}, ${sat}%, ${lit}%)`;
+
+      body.appendChild(el);
+
+      // 动画结束后移除 DOM 节点
+      el.addEventListener('animationend', () => el.remove());
+    }
+
+    // 连续生成：初始密集一波，之后匀速
+    for (let i = 0; i < 30; i++) {
+      setTimeout(createHeart, i * 120);
+    }
+
+    setInterval(createHeart, 350);
+  </script>
+</body>
+</html>
