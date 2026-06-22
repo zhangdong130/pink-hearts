@@ -68,7 +68,7 @@
     letter-spacing: 1px;
   }
 
-  /* ====== 心跳大爱心 ====== */
+  /* ====== 心跳大图片 ====== */
   .heartbeat-container {
     position: fixed;
     top: 50%;
@@ -76,17 +76,20 @@
     transform: translate(-50%, -50%);
     z-index: 1;
     pointer-events: none;
-    width: 35vmin;
-    height: 35vmin;
+    width: auto;
+    height: 70vmin;
     animation: heartbeat 1.2s ease-in-out infinite;
     filter: drop-shadow(0 0 60px rgba(255, 50, 150, 0.35))
             drop-shadow(0 0 120px rgba(255, 20, 100, 0.15));
+    border-radius: 20px;
+    overflow: hidden;
   }
 
-  .heartbeat-container svg {
+  .heartbeat-container img {
     display: block;
-    width: 100%;
     height: 100%;
+    width: auto;
+    object-fit: contain;
   }
 
   /* 心跳关键帧 — 模拟 lub-dub 节奏 */
@@ -102,28 +105,9 @@
 </head>
 <body>
 
-  <!-- ====== 心跳大爱心（SVG 图片）====== -->
+  <!-- ====== 心跳图片 ====== -->
   <div class="heartbeat-container">
-    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="heartGrad" cx="40%" cy="35%" r="65%">
-          <stop offset="0%"   stop-color="#ff66b2"/>
-          <stop offset="40%"  stop-color="#ff1493"/>
-          <stop offset="80%"  stop-color="#cc0066"/>
-          <stop offset="100%" stop-color="#8a0033"/>
-        </radialGradient>
-        <radialGradient id="heartShine" cx="35%" cy="30%" r="50%">
-          <stop offset="0%"   stop-color="rgba(255,255,255,0.5)"/>
-          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-        </radialGradient>
-      </defs>
-      <!-- 爱心主体 -->
-      <path d="M256 448 C 140 358, 48 280, 48 176 C 48 100, 108 48, 174 48 C 214 48, 248 76, 256 108 C 264 76, 298 48, 338 48 C 404 48, 464 100, 464 176 C 464 280, 372 358, 256 448Z"
-            fill="url(#heartGrad)"/>
-      <!-- 高光 -->
-      <path d="M256 448 C 140 358, 48 280, 48 176 C 48 100, 108 48, 174 48 C 214 48, 248 76, 256 108 C 264 76, 298 48, 338 48 C 404 48, 464 100, 464 176 C 464 280, 372 358, 256 448Z"
-            fill="url(#heartShine)"/>
-    </svg>
+    <img src="1774271648208.png" alt="heartbeat">
   </div>
 
   <!-- 本地音频播放器 - 齐晨《咱们结婚吧》 -->
