@@ -67,9 +67,64 @@
     text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
     letter-spacing: 1px;
   }
+
+  /* ====== 心跳大爱心 ====== */
+  .heartbeat-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+    width: 35vmin;
+    height: 35vmin;
+    animation: heartbeat 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 60px rgba(255, 50, 150, 0.35))
+            drop-shadow(0 0 120px rgba(255, 20, 100, 0.15));
+  }
+
+  .heartbeat-container svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 心跳关键帧 — 模拟 lub-dub 节奏 */
+  @keyframes heartbeat {
+    0%   { transform: translate(-50%, -50%) scale(1); }
+    12%  { transform: translate(-50%, -50%) scale(1.35); }   /* 咚 (快速膨胀) */
+    24%  { transform: translate(-50%, -50%) scale(0.92); }   /* 快速回缩 */
+    36%  { transform: translate(-50%, -50%) scale(1.18); }   /* 哒 (二次搏动) */
+    50%  { transform: translate(-50%, -50%) scale(1); }      /* 恢复 */
+    100% { transform: translate(-50%, -50%) scale(1); }      /* 停顿 */
+  }
 </style>
 </head>
 <body>
+
+  <!-- ====== 心跳大爱心（SVG 图片）====== -->
+  <div class="heartbeat-container">
+    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="heartGrad" cx="40%" cy="35%" r="65%">
+          <stop offset="0%"   stop-color="#ff66b2"/>
+          <stop offset="40%"  stop-color="#ff1493"/>
+          <stop offset="80%"  stop-color="#cc0066"/>
+          <stop offset="100%" stop-color="#8a0033"/>
+        </radialGradient>
+        <radialGradient id="heartShine" cx="35%" cy="30%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,255,255,0.5)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+      </defs>
+      <!-- 爱心主体 -->
+      <path d="M256 448 C 140 358, 48 280, 48 176 C 48 100, 108 48, 174 48 C 214 48, 248 76, 256 108 C 264 76, 298 48, 338 48 C 404 48, 464 100, 464 176 C 464 280, 372 358, 256 448Z"
+            fill="url(#heartGrad)"/>
+      <!-- 高光 -->
+      <path d="M256 448 C 140 358, 48 280, 48 176 C 48 100, 108 48, 174 48 C 214 48, 248 76, 256 108 C 264 76, 298 48, 338 48 C 404 48, 464 100, 464 176 C 464 280, 372 358, 256 448Z"
+            fill="url(#heartShine)"/>
+    </svg>
+  </div>
 
   <!-- 本地音频播放器 - 齐晨《咱们结婚吧》 -->
   <div class="music-player">
@@ -121,6 +176,22 @@
     }
 
     setInterval(createHeart, 350);
+
+    // === 音乐从第17秒开始 ===
+    const audio = document.getElementById('bgm');
+    audio.addEventListener('loadedmetadata', () => {
+      audio.currentTime = 17;
+    });
+    // 用户手动拖进度后，再次播放仍从17秒开始（直到歌曲走过17秒才取消）
+    let hasPassed17 = false;
+    audio.addEventListener('timeupdate', () => {
+      if (audio.currentTime >= 17) hasPassed17 = true;
+    });
+    audio.addEventListener('seeking', () => {
+      if (!hasPassed17 && audio.currentTime < 17) {
+        audio.currentTime = 17;
+      }
+    });
   </script>
 </body>
 </html>
